@@ -1,0 +1,7 @@
+{
+    "name": "SeparateCameras",
+    "version_number": "0.0.0",
+    "website_url": "https://github.com/cptkumquat/LethalCompany-SeparateCameras",
+    "description": "Control the terminal radar separately from the map screen display",
+    "dependencies": ["BepInEx-BepInExPack-5.4.2100"]
+}
