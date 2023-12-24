@@ -14,7 +14,7 @@ namespace SeparateCameras
     {
         private const string MOD_GUID = "CptKumquat.SeparateCameras";
         private const string MOD_NAME = "Separate Cameras";
-        private const string MOD_VERSION = "0.0.0";
+        private const string MOD_VERSION = "0.1.0";
 
         private readonly Harmony harmony = new Harmony(MOD_GUID);
 
