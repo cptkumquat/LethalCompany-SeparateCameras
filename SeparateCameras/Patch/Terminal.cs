@@ -161,6 +161,7 @@ namespace SeparateCameras.Patch
 
             return null;
         }
+
         private static int CheckForPlayerNameCommand(string firstWord, string secondWord)
         {
             if (firstWord == "radar")
@@ -168,27 +169,34 @@ namespace SeparateCameras.Patch
                 return -1;
             }
 
-            if (secondWord.Length <= 2)
+            // added logic for choosing a player by idx
+            int secondWordIdx = -1;
+            if (secondWord.Length <= 2 && !int.TryParse(secondWord, out secondWordIdx))
             {
                 return -1;
             }
 
-            Debug.Log("first word: " + firstWord + "; second word: " + secondWord);
-            List<string> list = new List<string>();
-            for (int i = 0; i < mcr.radarTargets.Count; i++)
+            if (secondWordIdx >= 1 && secondWordIdx <= mcr.radarTargets.Count)
             {
-                list.Add(mcr.radarTargets[i].name);
-                Debug.Log($"name {i}: {list[i]}");
+                return secondWordIdx - 1;
             }
 
+            Debug.Log("first word: " + firstWord + "; second word: " + secondWord);
+            List<string> list = new List<string>();
+
             secondWord = secondWord.ToLower();
-            for (int j = 0; j < list.Count; j++)
+
+            var exactMatchCaseInvariant = mcr.radarTargets.FindIndex((t) => t.name.ToLower() == secondWord);
+            if (exactMatchCaseInvariant >= 0)
             {
-                string text = list[j].ToLower();
-                if (text == secondWord)
-                {
-                    return j;
-                }
+                return exactMatchCaseInvariant;
+            }
+
+            // Prefer prefix matches over the greedy... first-minimal-prefix match (?) in the default implementation
+            var prefixMatchCaseInvariant = mcr.radarTargets.FindIndex((t) => t.name.ToLower().StartsWith(secondWord));
+            if (prefixMatchCaseInvariant >= 0)
+            {
+                return prefixMatchCaseInvariant;
             }
 
             Debug.Log($"Target names length: {list.Count}");
